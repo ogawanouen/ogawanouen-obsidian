@@ -1,0 +1,7 @@
+interface:
+  display_name: "野菜DBテンプレート作成"
+  short_description: "通常はWeb調査済みの野菜DB雛形を作成します"
+  default_prompt: "Use $vegetable-database-template to create a web-researched vegetable database template under knowledge/vegetables unless I explicitly ask for a blank one."
+
+policy:
+  allow_implicit_invocation: true

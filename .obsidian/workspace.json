@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "knowledge/vegetables/ルバーブ.md",
+                "file": "knowledge/vegetables/キュウリ.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "ルバーブ"
+              "title": "キュウリ"
             }
           }
         ]
@@ -180,7 +180,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 498.5
+    "width": 200
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -196,20 +196,31 @@
   },
   "active": "e54509e9843d4f4c",
   "lastOpenFiles": [
-    "knowledge/vegetables/キュウリ.md",
-    "knowledge/vegetables/ルバーブ.md",
     "knowledge/vegetables/トマト.md",
+    "knowledge/vegetables/ナス.md",
+    "knowledge/vegetables/ルバーブ.md",
+    "knowledge/vegetable-frontmatter-guide.md",
+    "knowledge/vegetables/キュウリ.md",
     "template.md",
-    "knowledge/style",
-    "knowledge/vegetables",
-    "knowledge",
-    "無題のファイル.base",
+    "skills/vegetable-database-template/SKILL.md",
+    "skills/vegetable-database-template/scripts/create_vegetable_database.py",
+    "skills/vegetable-database-template/references/template-fields.md",
+    "skills/vegetable-database-template/agents/openai.yaml",
+    "skills/vegetable-database-template/scripts",
+    "skills/vegetable-database-template/references",
+    "skills/vegetable-database-template/agents",
+    "skills/vegetable-database-template",
+    "skills/vegetable-introduction-writer/references/knowledge-layout.md",
+    "skills/vegetable-introduction-writer/agents/openai.yaml",
+    "skills/vegetable-introduction-writer/references",
+    "skills/vegetable-introduction-writer/agents",
+    "skills/vegetable-introduction-writer/SKILL.md",
+    "skills/vegetable-introduction-writer",
     "ようこそ.md",
     "Clippings/お野菜と一緒にお届けしているもの  坂ノ途中  100年先もつづく、農業を。.md",
     "Clippings/野菜の保存方法を教えてください - よくある質問  坂ノ途中.md",
     "Clippings/ご利用案内  坂ノ途中Onlineshop  出会う、味わう、季節の暮らし。.md",
     "Clippings/坂ノ途中の取り扱い基準  坂ノ途中  100年先もつづく、農業を。.md",
-    "Clippings/ウェブページのクリップ.md",
-    "Clippings"
+    "Clippings/ウェブページのクリップ.md"
   ]
 }
