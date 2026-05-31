@@ -12,6 +12,130 @@ from datetime import date
 from pathlib import Path
 
 
+CONTROLLED_VALUES = {
+    "category_large": {
+        "果菜類",
+        "葉菜類",
+        "根菜類",
+        "いも類",
+        "豆類",
+        "香味野菜",
+        "ハーブ類",
+        "山菜・野草",
+        "穀物・雑穀",
+        "きのこ類",
+    },
+    "category_medium": {
+        "トマト類",
+        "ナス類",
+        "ウリ類",
+        "ピーマン・唐辛子類",
+        "葉物",
+        "結球野菜",
+        "根もの",
+        "かぶ・大根類",
+        "いも類",
+        "豆・さや豆類",
+        "香味・薬味",
+        "ハーブ",
+        "西洋葉菜",
+        "茎を食べる野菜",
+    },
+    "crop_family": {
+        "ナス科",
+        "ウリ科",
+        "アブラナ科",
+        "キク科",
+        "ヒユ科",
+        "セリ科",
+        "ユリ科",
+        "ヒガンバナ科",
+        "マメ科",
+        "イネ科",
+        "タデ科",
+        "シソ科",
+    },
+    "edible_part": {
+        "果実",
+        "葉",
+        "茎",
+        "根",
+        "塊茎",
+        "鱗茎",
+        "花蕾",
+        "さや",
+        "種子",
+        "新芽",
+        "香り葉",
+    },
+    "color": {
+        "赤",
+        "黄",
+        "オレンジ",
+        "緑",
+        "濃緑",
+        "紫",
+        "白",
+        "黒紫",
+        "ピンク",
+        "クリーム",
+        "複色",
+        "カラフル",
+    },
+    "shape": {
+        "丸い",
+        "楕円",
+        "細長い",
+        "太長い",
+        "平たい",
+        "球形",
+        "円錐形",
+        "房状",
+        "さや状",
+        "葉状",
+        "茎状",
+        "ごつごつ",
+        "しずく形",
+    },
+    "size_class": {
+        "極小",
+        "小",
+        "中",
+        "大",
+        "特大",
+        "ミニ",
+        "一口サイズ",
+        "細め",
+        "太め",
+        "長め",
+        "規格外あり",
+    },
+    "best_uses": {
+        "生食",
+        "焼く",
+        "煮る",
+        "炒める",
+        "蒸す",
+        "揚げる",
+        "漬ける",
+        "茹でる",
+        "スープ",
+        "サラダ",
+        "ジャム",
+        "ソース",
+        "薬味",
+        "彩り",
+        "作り置き",
+        "お弁当",
+        "子ども向け",
+        "ギフト向け",
+    },
+}
+
+REQUIRED_GENERAL_FIELDS = ("category_large", "category_medium", "category_small")
+MULTI_VALUE_FIELDS = {"edible_part", "color", "best_uses", "market_group"}
+
+
 def normalize_name(value: str) -> str:
     value = unicodedata.normalize("NFKC", value).strip()
     value = re.sub(r"\s+", "", value)
@@ -95,11 +219,58 @@ def profile_value(profile: dict[str, object], *keys: str) -> object:
     return ""
 
 
+def values_as_list(value: object) -> list[str]:
+    if value in (None, ""):
+        return []
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    return [str(value).strip()]
+
+
+def validate_profile(profile: dict[str, object], mode: str) -> None:
+    if mode != "general":
+        return
+
+    missing = [
+        field
+        for field in REQUIRED_GENERAL_FIELDS
+        if not values_as_list(profile_value(profile, field))
+    ]
+    if missing:
+        print(
+            f"ERROR: missing required profile field(s): {', '.join(missing)}",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
+
+    errors: list[str] = []
+    for field, allowed_values in CONTROLLED_VALUES.items():
+        value = profile_value(profile, field, "family" if field == "crop_family" else "")
+        values = values_as_list(value)
+        if not values:
+            continue
+
+        if field not in MULTI_VALUE_FIELDS and len(values) > 1:
+            errors.append(f"{field} must be a single value")
+            continue
+
+        invalid = [item for item in values if item not in allowed_values]
+        if invalid:
+            allowed = "、 ".join(sorted(allowed_values))
+            errors.append(f"{field} has invalid value(s): {', '.join(invalid)}. Allowed: {allowed}")
+
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        raise SystemExit(2)
+
+
 def yaml_scalar(value: object) -> str:
     if value is None:
         return ""
     if isinstance(value, list):
-        return "、".join(str(item).strip() for item in value if str(item).strip())
+        items = [str(item).strip() for item in value if str(item).strip()]
+        return f"[{'、 '.join(items)}]" if items else "[]"
     return str(value).strip()
 
 
@@ -107,8 +278,8 @@ def yaml_field(name: str, value: object = "") -> str:
     if isinstance(value, list):
         items = [str(item).strip() for item in value if str(item).strip()]
         if not items:
-            return f"{name}:"
-        return f"{name}:\n" + "\n".join(f"  - {item}" for item in items)
+            return f"{name}: []"
+        return f"{name}: [{'、 '.join(items)}]"
 
     scalar = yaml_scalar(value)
     return f"{name}: {scalar}" if scalar else f"{name}:"
@@ -117,35 +288,28 @@ def yaml_field(name: str, value: object = "") -> str:
 def render_frontmatter(vegetable: str, mode: str, profile: dict[str, object]) -> str:
     today = date.today().isoformat()
     is_general = mode == "general"
-    status = "general-draft" if is_general else "draft"
     category_small = profile_value(profile, "category_small") if is_general else ""
     if not category_small:
         category_small = vegetable
 
     frontmatter_lines = [
-        "type: vegetable-database",
         "aliases: []",
-        f"status: {status}",
-        f"template_mode: {mode}",
+        f"created: {today}",
+        f"updated: {today}",
     ]
-
-    if is_general:
-        frontmatter_lines.extend([f"created: {today}", f"updated: {today}"])
 
     frontmatter_lines.extend(
         [
             yaml_field("category_large", profile_value(profile, "category_large")),
             yaml_field("category_medium", profile_value(profile, "category_medium")),
             yaml_field("category_small", category_small),
+            yaml_field("market_group", profile_value(profile, "market_group")),
             yaml_field("crop_family", profile_value(profile, "crop_family", "family")),
             yaml_field("edible_part", profile_value(profile, "edible_part")),
             yaml_field("color", profile_value(profile, "color")),
             yaml_field("shape", profile_value(profile, "shape")),
             yaml_field("size_class", profile_value(profile, "size_class")),
-            yaml_field("texture", profile_value(profile, "frontmatter_texture", "texture")),
-            yaml_field("flavor", profile_value(profile, "flavor")),
             yaml_field("best_uses", profile_value(profile, "best_uses")),
-            yaml_field("sales_angle", profile_value(profile, "sales_angle")),
         ]
     )
 
@@ -303,6 +467,7 @@ def main() -> int:
         return 2
 
     profile = load_profile(args.profile_file) if args.mode == "general" else {}
+    validate_profile(profile, args.mode)
 
     target_dir.mkdir(parents=True, exist_ok=True)
     target_path = target_dir / f"{safe_filename(vegetable)}.md"

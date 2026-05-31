@@ -1,7 +1,7 @@
 interface:
   display_name: "野菜紹介文ライター"
-  short_description: "小川農園の野菜知識から紹介文を作成します"
-  default_prompt: "Use $vegetable-introduction-writer to create Japanese vegetable introduction copy from knowledge/vegetables and knowledge/style."
+  short_description: "野菜紹介文を取得・作成・保存します"
+  default_prompt: "Use $vegetable-introduction-writer to retrieve an existing vegetable introduction first; if none exists, create and save it under knowledge/introductions/<vegetable>.md."
 
 policy:
   allow_implicit_invocation: true

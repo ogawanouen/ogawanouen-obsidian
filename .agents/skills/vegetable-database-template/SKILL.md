@@ -49,22 +49,26 @@ The created file must be a Markdown database note with YAML frontmatter and clea
 
 - basic identity
 - cultivation and harvest
-- flavor and texture
+- flavor and texture body notes
 - recommended ways to eat
 - storage
 - introduction-copy source notes
 - cautions and expressions to avoid
 - update history
 
-`blank` mode leaves all fields empty except the vegetable name, section headings, status, and dates.
+`blank` mode leaves all fields empty except the vegetable name, section headings, and dates.
 
 `general` mode pre-fills ordinary, non-farm-specific culinary and handling information from web research to make a quick first draft. Mark general content as general information, include source URLs in `参考情報源`, and keep 小川農園-specific fields empty unless the user provides those facts.
+
+Write frontmatter arrays on one line with Japanese comma separators, for example `best_uses: [生食、 サラダ]`. Do not use block-list frontmatter such as `best_uses:` followed by `- 生食`.
 
 See `references/template-fields.md` for the field definitions and authoring guidance.
 
 ## Research Profile JSON
 
-For frontmatter field selection, read `references/frontmatter-guide.md`. Prefer its controlled vocabulary for `category_large`, `category_medium`, `category_small`, `crop_family`, `edible_part`, `color`, `shape`, `size_class`, `texture`, `flavor`, `best_uses`, and `sales_angle`.
+For frontmatter field selection, read `references/frontmatter-guide.md`. Prefer its controlled vocabulary for `category_large`, `category_medium`, `category_small`, `crop_family`, `edible_part`, `color`, `shape`, `size_class`, and `best_uses`.
+
+In `general` mode, `category_large`, `category_medium`, and `category_small` are required. The script rejects missing required fields. Controlled fields must use only values listed in `references/frontmatter-guide.md`; if a value does not fit, leave optional fields blank or update the guide before using a new controlled value. `category_small` and `aliases` are flexible text fields.
 
 For `general` mode, write a temporary JSON object with any researched keys that are supported by the template:
 
@@ -78,10 +82,7 @@ For `general` mode, write a temporary JSON object with any researched keys that 
   "color": "赤",
   "shape": "丸い",
   "size_class": "中",
-  "frontmatter_texture": "みずみずしい",
-  "flavor": "甘酸っぱい",
   "best_uses": ["生食", "サラダ", "煮る"],
-  "sales_angle": ["旬", "色がきれい"],
   "family": "ナス科",
   "varieties": "一般的な品種名や種類",
   "uses": "主な用途",

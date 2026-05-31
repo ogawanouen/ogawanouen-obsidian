@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "knowledge/vegetables/キュウリ.md",
+                "file": "knowledge/introductions/ルバーブ.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "キュウリ"
+              "title": "ルバーブ"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "abbeed84000da265",
@@ -196,12 +196,16 @@
   },
   "active": "e54509e9843d4f4c",
   "lastOpenFiles": [
+    "knowledge/introductions/トマト.md",
+    "knowledge/introductions/ルバーブ.md",
     "knowledge/vegetables/トマト.md",
-    "knowledge/vegetables/ナス.md",
+    "knowledge/introductions",
     "knowledge/vegetables/ルバーブ.md",
-    "knowledge/vegetable-frontmatter-guide.md",
-    "knowledge/vegetables/キュウリ.md",
+    "knowledge/contents",
     "template.md",
+    "knowledge/vegetable-frontmatter-guide.md",
+    "knowledge/vegetables/ナス.md",
+    "knowledge/vegetables/キュウリ.md",
     "skills/vegetable-database-template/SKILL.md",
     "skills/vegetable-database-template/scripts/create_vegetable_database.py",
     "skills/vegetable-database-template/references/template-fields.md",
@@ -213,9 +217,7 @@
     "skills/vegetable-introduction-writer/references/knowledge-layout.md",
     "skills/vegetable-introduction-writer/agents/openai.yaml",
     "skills/vegetable-introduction-writer/references",
-    "skills/vegetable-introduction-writer/agents",
     "skills/vegetable-introduction-writer/SKILL.md",
-    "skills/vegetable-introduction-writer",
     "ようこそ.md",
     "Clippings/お野菜と一緒にお届けしているもの  坂ノ途中  100年先もつづく、農業を。.md",
     "Clippings/野菜の保存方法を教えてください - よくある質問  坂ノ途中.md",
